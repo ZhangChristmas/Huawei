@@ -1,0 +1,69 @@
+# docker-compose.yml
+version: '3.8'
+
+services:
+  # FastAPI 后端应用
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile # 我们稍后会创建这个Dockerfile
+    container_name: suivuetong-backend
+    restart: always
+    volumes:
+      # 在开发中可以挂载代码目录，生产中建议直接构建到镜像里
+      # - ./app:/app/app
+      - ./private_key.pem:/app/private_key.pem
+      - ./public_key.pem:/app/public_key.pem
+    env_file:
+      - .env # 加载环境变量文件
+    ports:
+      - "8000:8000" # 将容器的8000端口映射到服务器的8000端口
+    depends_on:
+      - mongo
+      - emqx
+    networks:
+      - app-network
+
+  # MongoDB 数据库
+  mongo:
+    image: mongo:6.0 # 使用一个具体的版本
+    container_name: suivuetong-mongo
+    restart: always
+    volumes:
+      - mongo-data:/data/db # 将数据持久化到Docker卷
+    # 如果需要认证，在这里设置环境变量
+    # environment:
+    #   - MONGO_INITDB_ROOT_USERNAME=your_mongo_user
+    #   - MONGO_INITDB_ROOT_PASSWORD=your_mongo_password
+    ports:
+      - "27017:27017"
+    networks:
+      - app-network
+
+  # EMQX MQTT Broker
+  emqx:
+    image: emqx/emqx:latest
+    container_name: suivuetong-emqx
+    restart: always
+    ports:
+      - "1883:1883"
+      - "8883:8883"
+      - "8083:8083"
+      - "18083:18083"
+    volumes:
+      # 如果需要持久化EMQX数据和配置
+      - emqx-data:/opt/emqx/data
+      - emqx-etc:/opt/emqx/etc
+      - emqx-log:/opt/emqx/log
+    networks:
+      - app-network
+
+volumes:
+  mongo-data:
+  emqx-data:
+  emqx-etc:
+  emqx-log:
+
+networks:
+  app-network:
+    driver: bridge

@@ -1,20 +1,58 @@
-# Environments
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual environment
 .env
-.venv
 venv/
 env/
+ENV/
+# Note: If you are using a different name for your virtual environment,
+# update the line above accordingly.
 
-# Python cache
-__pycache__/
-*.pyc
-*.pyo
-*.pyd
-
-# IDE settings
+# IDEs and editors
 .idea/
 .vscode/
+*.swp
+*~
+*.sublime-project
+*.sublime-workspace
 
-# Distribution
-dist/
-build/
-*.egg-info/
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Misc
+*.log
+*.pot
+*.pyc
+local_settings.py
+db.sqlite3
+db.sqlite3-journal
+instance/
+# Add other files and directories you want to ignore
