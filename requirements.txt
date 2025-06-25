@@ -32,7 +32,7 @@ sxtwl==1.1 # For Chinese Lunar Calendar (报时间)
 
 # Aliyun SDKs (for TTS and SMS)
 aliyun-python-sdk-core==2.16.0
-aliyun-python-sdk-nls-cloud-meta==1.2.1 # For TTS Token
+aliyun-python-sdk-nls-cloud-meta==1.0.1 # For TTS Token
 aliyun-python-sdk-dysmsapi==2.0.2     # For SMS Service
 
 # WebSocket (used internally by Aliyun TTS SDK, good to have it explicit)
