@@ -1,30 +1,26 @@
-# Dockerfile
+# Dockerfile (修正版 v2)
 
-# 1. 使用官方Python镜像作为基础
 FROM python:3.10-slim
 
-# 2. 设置工作目录
 WORKDIR /app
 
-# 3. 安装Poetry (可选，但推荐用于依赖管理) 或直接用requirements.txt
-# RUN pip install poetry
-# COPY poetry.lock pyproject.toml /app/
-# RUN poetry config virtualenvs.create false && poetry install --no-root --no-dev
+# 【核心修正】在安装Python包之前，先安装系统级的编译工具
+# apt-get update 更新包列表
+# apt-get install -y --no-install-recommends gcc build-essential 安装编译工具链
+# apt-get clean && rm -rf /var/lib/apt/lists/* 清理缓存，保持镜像体积小
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends gcc build-essential && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
 
-# 或者，使用 requirements.txt (更简单)
 COPY requirements.txt .
+
+# 使用国内镜像源安装Python依赖
 RUN pip install --no-cache-dir --upgrade pip -i https://pypi.tuna.tsinghua.edu.cn/simple
 RUN pip install --no-cache-dir -r requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
 
-# 4. 复制应用代码到工作目录
 COPY ./app /app/app
 
-# 5. 暴露端口 (Gunicorn/Uvicorn将监听这个端口)
 EXPOSE 8000
 
-# 6. 运行应用的命令
-# 使用Gunicorn作为进程管理器，Uvicorn作为ASGI worker
 CMD ["gunicorn", "-k", "uvicorn.workers.UvicornWorker", "-w", "4", "-b", "0.0.0.0:8000", "app.main:app"]
-# -k: 指定worker类型
-# -w: worker数量, 通常是 (2 * CPU核心数) + 1
-# -b: 绑定地址和端口, 0.0.0.0 允许从容器外部访问
