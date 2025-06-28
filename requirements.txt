@@ -1,3 +1,4 @@
+aiomqtt==2.4.0
 aliyun-python-sdk-core==2.16.0
 aliyun-python-sdk-dysmsapi==2.1.2
 aliyun-python-sdk-kms==2.16.5
@@ -24,7 +25,6 @@ jmespath==0.10.0
 motor==3.7.1
 oss2==2.19.1
 packaging==25.0
-paho-mqtt==2.1.0
 passlib==1.7.4
 pyasn1==0.6.1
 pycparser==2.22
